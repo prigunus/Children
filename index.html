@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFto Text Extractor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js" integrity="sha512-FbzTWNUXsD1HkMnfODpqj77B8pWe5eG9MaVtaUyZQGe8FaeQg1sNKtwMWk9USkHFu3ub8dg5PSE24s4JJpJQcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        h1{
+            width: 100%;
+            text-align: center;
+        }
+        .pdfwork.afterupload{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+        .pdfwork *{
+            margin-top: 5px;
+        }
+
+        .afterupload{
+            display: block;
+        }
+        .another{
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>PDF To Text EXtractor</h1>
+    <div class="pdfowrk">
+        <button class="another" onclick="location.reload()">초기화하기</button>>
+        <br>
+        <span>시험성적서 선택하기</span>
+        <input type="file" class="selectpdf">
+        <br>
+        <span>Password : </span>
+        <input type="password" class="pwd" placeholder="optional">
+        <button class="upload">조회하기</button>
+        <div class="afterupload">
+            <span>Select Page</span>
+            <select class="selectpage" onchange="atterProcess()"></select>
+            <br>
+            <a href="" class="download" download>Download Pdf Text</a>
+            <br>
+            <textarea style="width:600px; height:500px;" class="pdftext" placeholder="제품에 대한 정보입니다."></textarea>
+        </div>
+    </div>
+
+    <script>
+        let pdfinput = document.querySelector(".selectpdf");
+        let pwd = document.querySelector(".pwd");
+        let upload = document.querySelector(".upload");
+        let afterupload = document.querySelector(".afterupload");
+        let select = document.querySelector("select");
+        let download = document.querySelector(".download");
+        let pdftext = document.querySelector(".pdftext");
+
+        upload.addEventListener('click',()=>{
+            let file = pdfinput.files[0];
+            if(file!=undefined&&file.type=="application/pdf"){
+                let fr = new FileReader();
+                fr.readAsDataURL(file)
+                fr.onload=()=>{
+                    let res = fr.result;
+                    if(pwd.value==""){
+                        extractText(res,false)
+                    }else{
+                        extractText(res,true)
+                    }
+                }
+            }else{
+                alert("select a valid pdf file")
+            }
+        })
+        let alltext = [];
+        async function extractText(url, pass) {
+            try{
+            let pdf;
+            if(pass){
+                pdf = await pdfjsLib.getDocument({url:url,password:pwd.value}).promise;
+            }else{
+                pdf = await pdfjsLib.getDocument(url).promise;
+            }
+            let pages = pdf.numPages;
+            for(let i=1;i<=pages;i++){
+                let page = await pdf.getPage(i)
+                let txt = await page.getTextContent();
+                let text = txt.items.map((s)=>s.str).join("");
+                alltext.push(text)
+            }
+            alltext.map((e,i)=>{
+                select.innerHTML+=`<option value="${i+1}">${i+1}</option>`;
+            })
+            atterProcess()
+            }catch(err){
+                alert(err.message)
+            }
+        }
+
+        function atterProcess(){
+            pdftext.value= alltext[select.value-1];
+            download.href="data:text/plain;charset=utf-8,"+ encodeURIComponent(alltext[select.value-1])
+            afterupload.style.display="block";
+            document.querySelector(".another").style.display="unset"
+        }
+    </script>
+</body>
+</html>
