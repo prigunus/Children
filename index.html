@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDFto Text Extractor</title>
+    <title>한국기계전기전자시험연구원</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js" integrity="sha512-FbzTWNUXsD1HkMnfODpqj77B8pWe5eG9MaVtaUyZQGe8FaeQg1sNKtwMWk9USkHFu3ub8dg5PSE24s4JJpJQcQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
     <style>
         h1{
             width: 100%;
@@ -27,40 +31,126 @@
         }
         .another{
             display: block;
+
+        }
+        .styled-table {
+            border-collapse: collapse;
+            border: 2.0;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+        .styled-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: center;
         }
 
+        #row1 {
+            background-color: #3e0fbe;
+        }
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
     </style>
 </head>
+
+
+
 <body>
-    <h1>PDF To Text EXtractor</h1>
+    <h2>KTC </h2>
     <div class="pdfowrk">
-        <button class="another" onclick="location.reload()">초기화하기</button>>
+        <button class="another" onclick="location.reload()" style="width: 150px;">초기화하기</button>
         <br>
         <span>시험성적서 선택하기</span>
-        <input type="file" class="selectpdf">
+        <input type="file" class="selectpdf" id="selectpdf">
+        <button class="upload" style="width: 150px;">선택완료</button>
         <br>
         <span>Password : </span>
-        <input type="password" class="pwd" placeholder="optional">
-        <button class="upload">조회하기</button>
+        <input type="password" class="pwd" placeholder="optional" style="width: 150px; " style="display: none">
+        <button class="test" type="button" py-click="speak()">run test</button>
+        <div id="pdftext_result" style="width:1000px;"> </div>
+
+	<div>
+        <table class="styled-table" style="width: 800px;">
+            <thead>
+                <tr>
+                    <th id="row1" colspan="3">일반표시</th>
+                    <th id="row2" rowspan="1">안전표시</th>
+                </tr>
+            </thead>
+            <thead>
+                <tr>
+                    <th colspan="1">제품낱개</th>
+                    <th>단위포장</th>
+                    <th>사용설명서</th>
+                 
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2">제품 낱개에는 ‘제조(수입)자명 또는 그 약호’ 및 ‘안전표시’, ‘지시사항’을 표시하여야 한다.</td>
+                    <td>단위 포장에는 눈에 가장 띄기 쉬운 전면에 쉽게 지워지지 않는 방법으로 다음 사항을 한글로 표시하여야 한다</td>
+                    <td rowspan="2">한글로 안전표시 및 지시사항이 표시</td>
+                </tr>
+                <tr class="active-row">
+
+                    <td>5.1.2.1 품명<br>          
+                        5.1.2.2 모델명<br>
+                        5.1.2.3 제조연월<br>      
+                        5.1.2.4 제조자명 또는 수입자명(수입품에 한함)<br>
+                        5.1.2.5 주소 및 전화번호<br>
+                        5.1.2.6 안전 표시(주의․경고 등)<br>
+                        5.1.2.6.1 사용연령   <br>  
+                        5.1.2.6.2 크기 및 한계 체중<br>
+                        5.1.2.7 제조국</td>
+
+                </tr>
+                <!-- and so on... -->
+            </tbody>
+        </table>
+    </div>
         <div class="afterupload">
-            <span>Select Page</span>
-            <select class="selectpage" onchange="atterProcess()"></select>
+            <select class="selectpage" onchange="atterProcess()" style="width: 100px; height:10;"></select>
             <br>
             <a href="" class="download" download>Download Pdf Text</a>
             <br>
-            <textarea style="width:600px; height:500px;" class="pdftext" placeholder="제품에 대한 정보입니다."></textarea>
+            <textarea style="width:800px; height:200px;" class="pdftext" id="pdftext" placeholder="제품에 대한 정보입니다."></textarea>
+            
         </div>
     </div>
+
 
     <script>
         let pdfinput = document.querySelector(".selectpdf");
         let pwd = document.querySelector(".pwd");
         let upload = document.querySelector(".upload");
         let afterupload = document.querySelector(".afterupload");
-        let select = document.querySelector("select");
+        let select = document.querySelector(".selectpage");
         let download = document.querySelector(".download");
         let pdftext = document.querySelector(".pdftext");
+        name = "chang";
 
+        // function1
         upload.addEventListener('click',()=>{
             let file = pdfinput.files[0];
             if(file!=undefined&&file.type=="application/pdf"){
@@ -68,17 +158,25 @@
                 fr.readAsDataURL(file)
                 fr.onload=()=>{
                     let res = fr.result;
+            
                     if(pwd.value==""){
                         extractText(res,false)
                     }else{
                         extractText(res,true)
+
                     }
                 }
+  
             }else{
                 alert("select a valid pdf file")
             }
         })
-        let alltext = [];
+        alltext = [];
+
+        
+        // function2
+
+    
         async function extractText(url, pass) {
             try{
             let pdf;
@@ -87,28 +185,53 @@
             }else{
                 pdf = await pdfjsLib.getDocument(url).promise;
             }
+
             let pages = pdf.numPages;
+            
             for(let i=1;i<=pages;i++){
                 let page = await pdf.getPage(i)
                 let txt = await page.getTextContent();
+                //let text = txt.items.map((s)=>s.str).join("");
                 let text = txt.items.map((s)=>s.str).join("");
-                alltext.push(text)
+                if (text.indexOf("")==0){
+                    alltext.push(text)
+                    }
             }
+            //alert(alltext)
             alltext.map((e,i)=>{
                 select.innerHTML+=`<option value="${i+1}">${i+1}</option>`;
+       
             })
             atterProcess()
+
             }catch(err){
                 alert(err.message)
             }
         }
 
+        // function3
         function atterProcess(){
-            pdftext.value= alltext[select.value-1];
+            //pdftext.value= alltext[select.value-1];
+            pdftext.value= alltext;
             download.href="data:text/plain;charset=utf-8,"+ encodeURIComponent(alltext[select.value-1])
+ 
             afterupload.style.display="block";
             document.querySelector(".another").style.display="unset"
+
+            
+            
         }
+
+        
     </script>
+    <py-config>
+      packages = [
+       "numpy",
+       "pandas",
+       "pdfplumber"
+      ]
+    </py-config>
+    <py-script src="anal.py"></py-script>
+
 </body>
 </html>
