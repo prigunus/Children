@@ -1,0 +1,116 @@
+body{
+    margin: 5px;
+}
+
+/*웹 폰트 사용하기 */
+.ng-font {
+    font-family:'monospace';font-weight: bold;
+}
+
+#box {
+    margin:10px;
+    font-size: 15px;
+    font-family: monospace;
+
+    
+}
+
+/*input box */
+.textbox label {
+  position: absolute;
+  top: 1px;  /* input 요소의 border-top 설정값 만큼 */
+  left: 1px;  /* input 요소의 border-left 설정값 만큼 */
+  padding: .8em .5em;  /* input 요소의 padding 값 만큼 */
+  color: #999;
+  cursor: text;
+}
+.textbox input{
+  width: 45%;  /* 원하는 너비 설정 */ 
+  height: auto;  /* 높이값 초기화 */
+  line-height : normal;  /* line-height 초기화 */
+  padding: .8em .5em; /* 원하는 여백 설정, 상하단 여백으로 높이를 조절 */
+  font-family: inherit;  /* 폰트 상속 */
+  border: 1px solid #190d86;
+  border-radius: 5;  /* iSO 둥근모서리 제거 */
+  outline-style: none;  /* 포커스시 발생하는 효과 제거를 원한다면 */
+  -webkit-appearance: none;  /* 브라우저별 기본 스타일링 제거 */
+  -moz-appearance: none;
+  appearance: none;
+}
+
+
+
+/* 1번버튼 스타일 */
+.btn {margin: 9px;}
+.btn {
+  color: white; 
+  padding: 15px 25px;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom-color: rgba(0,0,0,0.34);
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+              0 2px 0 -1px rgba(0,0,0,0.13), 
+              0 3px 0 -1px rgba(0,0,0,0.08), 
+              0 3px 13px -1px rgba(0,0,0,0.21);
+}
+.btn:active {
+  top: 1px;
+  border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  position: relative;
+}
+.btn.green {background-color: #9abf7f;}
+.btn.blue {background-color: #343d88;}
+
+/* 2번버튼 스타일 */
+.btn2 {margin: 9px;}
+.btn2 {
+  color: white; 
+  padding: 15px 25px;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom-color: rgba(0,0,0,0.34);
+  text-shadow:0 1px 0 rgba(0,0,0,0.15);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset, 
+              0 2px 0 -1px rgba(0,0,0,0.13), 
+              0 3px 0 -1px rgba(0,0,0,0.08), 
+              0 3px 13px -1px rgba(0,0,0,0.21);
+}
+.btn2:active {
+  top: 1px;
+  border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  position: relative;
+}
+.btn2 {background-color: #9abf7f;}
+.btn2 {background-color: #686da1;}
+
+
+.flex-container{
+    margin:10px;
+    padding: 15px 25px;
+    background-color: #DAE7F7;
+    width: 700px;
+}
+
+.ment0{
+    text-align: center;
+    color: #190d86;
+}
+/*
+.ment1{
+    text-align: left;
+    background-color: rgb(162, 173, 238);
+}
+.ment2{
+    text-align: left;
+    background-color: blanchedalmond;
+}
+*/
+.thumnail{
+    text-align: center;
+    width: 40px;
+}
+
+
