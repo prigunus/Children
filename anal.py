@@ -1,6 +1,5 @@
 # Import and use JS function and variable into Python
 from js import alltext
-import js
 import re
 from pyscript import Element
 
